@@ -17,6 +17,7 @@
     h2 {
       text-align: center;
     }
+
     .italic {
       font-style: italic;
       margin-top: 2rem;
