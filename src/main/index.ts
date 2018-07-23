@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
-import * as path from "path"
-import { format as formatUrl } from "url"
+import * as path from "path";
+import { format as formatUrl } from "url";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -16,34 +16,35 @@ function createMainWindow() {
 
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
-  }
-  else {
-    window.loadURL(formatUrl({
-      pathname: path.join(__dirname, "index.html"),
-      protocol: "file",
-      slashes: true
-    }));
+  } else {
+    window.loadURL(
+      formatUrl({
+        pathname: path.join(__dirname, "index.html"),
+        protocol: "file",
+        slashes: true
+      })
+    );
   }
 
   window.on("closed", () => {
-    mainWindow = null
+    mainWindow = null;
   });
 
   window.webContents.on("devtools-opened", () => {
     window.focus();
     setImmediate(() => {
-      window.focus()
-    })
+      window.focus();
+    });
   });
 
-  return window
+  return window;
 }
 
 // quit application when all windows are closed
 app.on("window-all-closed", () => {
   // on macOS it is common for applications to stay open until the user explicitly quits
   if (process.platform !== "darwin") {
-    app.quit()
+    app.quit();
   }
 });
 
