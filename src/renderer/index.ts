@@ -1,7 +1,10 @@
+import "../styles/index.scss";
+
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 
 import App from "./App.vue";
+import Index from "./Index.vue";
 import NotFound from "./NotFound.vue";
 
 Vue.use(VueRouter);
@@ -9,7 +12,7 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   {
     path: "/",
-    component: App
+    component: Index
   },
   {
     path: "*",

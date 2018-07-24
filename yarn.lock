@@ -7897,6 +7897,10 @@ sanitize-filename@^1.6.1:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
+sanitize.css@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/sanitize.css/-/sanitize.css-6.0.0.tgz#360132a0f209c71756d5fae2978874202c8e29ac"
+
 sass-graph@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/sass-graph/-/sass-graph-2.2.4.tgz#13fbd63cd1caf0908b9fd93476ad43a51d1e0b49"

@@ -50,6 +50,7 @@ module.exports = {
 
     // Opinionated list of allowed units.
     "unit-whitelist": [
+      "fr",
       "vh",
       "em",
       "rem",
