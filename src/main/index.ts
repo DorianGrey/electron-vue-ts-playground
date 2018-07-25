@@ -1,4 +1,10 @@
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
+import {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  Menu,
+  MenuItemConstructorOptions
+} from "electron";
 import * as path from "path";
 import { format as formatUrl } from "url";
 import { NavEvent } from "../common/events";
@@ -43,16 +49,13 @@ function getMenuTemplate(): MenuItemConstructorOptions[] {
   ];
 }
 
-/*
 function registerShortCuts(): void {
   if (isDevelopment) {
     globalShortcut.register("CommandOrControl+R", () => {
-      // TODO: Reload causes some problems here - need to figure out why!
-      // Seems to be a problem with the history fallback...
+      mainWindow && mainWindow.reload();
     });
   }
 }
-*/
 
 function createMainWindow() {
   const window = new BrowserWindow();
@@ -63,7 +66,7 @@ function createMainWindow() {
   if (isDevelopment) {
     window.webContents.openDevTools();
   }
-  // registerShortCuts();
+  registerShortCuts();
 
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);

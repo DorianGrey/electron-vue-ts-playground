@@ -54,5 +54,10 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "electronWebpack": {
+    "renderer": {
+      "webpackConfig": "webpack.renderer.additions.js"
+    }
   }
 }
