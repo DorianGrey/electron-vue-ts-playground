@@ -6,6 +6,7 @@
   "rules": {
     "interface-name": [true, "never-prefix"],
     "member-access": [true, "no-public"],
+    "no-unused-expression": [true, "allow-fast-null-checks"],
     "object-literal-sort-keys": false
   },
   "linterOptions": {

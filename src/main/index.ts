@@ -1,18 +1,69 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
 import * as path from "path";
 import { format as formatUrl } from "url";
+import { NavEvent } from "../common/events";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | null = null;
+let menu: Menu | null = null;
+
+function getMenuTemplate(): MenuItemConstructorOptions[] {
+  return [
+    {
+      label: app.getName(),
+      submenu: [
+        {
+          label: "Quit",
+          click: () => {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: "View",
+      submenu: [
+        {
+          label: "Index",
+          click: () => {
+            mainWindow && mainWindow.webContents.send("nav", NavEvent.INDEX);
+          }
+        },
+        {
+          label: "Test Page 2",
+          click: () => {
+            mainWindow &&
+              mainWindow.webContents.send("nav", NavEvent.TEST_PAGE_2);
+          }
+        }
+      ]
+    }
+  ];
+}
+
+/*
+function registerShortCuts(): void {
+  if (isDevelopment) {
+    globalShortcut.register("CommandOrControl+R", () => {
+      // TODO: Reload causes some problems here - need to figure out why!
+      // Seems to be a problem with the history fallback...
+    });
+  }
+}
+*/
 
 function createMainWindow() {
   const window = new BrowserWindow();
 
+  menu = Menu.buildFromTemplate(getMenuTemplate());
+  Menu.setApplicationMenu(menu);
+
   if (isDevelopment) {
     window.webContents.openDevTools();
   }
+  // registerShortCuts();
 
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
@@ -28,6 +79,7 @@ function createMainWindow() {
 
   window.on("closed", () => {
     mainWindow = null;
+    menu = null;
   });
 
   window.webContents.on("devtools-opened", () => {
