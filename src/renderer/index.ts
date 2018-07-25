@@ -4,7 +4,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 
 import App from "./App.vue";
-import Index from "./Index.vue";
+import Markdown from "./Markdown.vue";
 import NotFound from "./NotFound.vue";
 import TestPage2 from "./TestPage2.vue";
 
@@ -13,12 +13,12 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   {
     path: "/",
-    redirect: "/index"
+    redirect: "/markdown"
   },
   {
-    name: "index",
-    path: "/index",
-    component: Index
+    name: "markdown",
+    path: "/markdown",
+    component: Markdown
   },
   {
     name: "test-page-2",

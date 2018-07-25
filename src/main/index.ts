@@ -32,9 +32,10 @@ function getMenuTemplate(): MenuItemConstructorOptions[] {
       label: "View",
       submenu: [
         {
-          label: "Index",
+          label: "Markdown editor test",
           click: () => {
-            mainWindow && mainWindow.webContents.send("nav", NavEvent.INDEX);
+            mainWindow &&
+              mainWindow.webContents.send("nav", NavEvent.MARKDOWN_TEST);
           }
         },
         {

@@ -10,13 +10,12 @@
 </template>
 
 <script lang="ts">
-import { ipcRenderer } from "electron";
+import { EventEmitter, ipcRenderer } from "electron";
 import Vue from "vue";
 import Component from "vue-class-component";
 import * as os from "os";
 import * as path from "path";
 import { NavEvent } from "../common/events";
-import { EventEmitter } from "electron";
 
 @Component
 export default class App extends Vue {

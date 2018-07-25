@@ -1,4 +1,4 @@
 export enum NavEvent {
-  INDEX = "index",
+  MARKDOWN_TEST = "markdown",
   TEST_PAGE_2 = "test-page-2"
 }
