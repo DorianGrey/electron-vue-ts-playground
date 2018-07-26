@@ -25,8 +25,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 // See https://discuss.codemirror.net/t/having-trouble-with-nodejs-require-and-codemirror-addons/1079/12
-// for why this import aims at the lib folder instead of the root one.
-import * as CodeMirror from "codemirror/lib/codemirror";
+// Might be required to import `codemirror/lib/codemirror` instead.
+import * as CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown.js";
 import "codemirror/theme/darcula.css";
@@ -38,7 +38,7 @@ import { debounceTime, map } from "rxjs/operators";
 
 @Component
 export default class Markdown extends Vue {
-  editor: CodeMirror.EditorFromTextArea;
+  editor!: CodeMirror.EditorFromTextArea;
   previewText: string | null = null;
   previewSubscription!: Subscription;
   readonly markedOptions = {
@@ -61,7 +61,7 @@ export default class Markdown extends Vue {
         viewportMargin: Infinity // See https://codemirror.net/demo/resize.html -> we want dynamic height.
       });
 
-      const previewObservable = fromEvent(this.editor, "changes").pipe(
+      const previewObservable = fromEvent(this.editor as any, "changes").pipe(
         debounceTime(200),
         map(() => this.editor.getValue())
       );

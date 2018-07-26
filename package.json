@@ -16,6 +16,7 @@
     "@types/codemirror": "^0.0.58",
     "@types/marked": "^0.4.0",
     "css-loader": "^1.0.0",
+    "electron": "^2.0.5",
     "electron-builder": "^20.25.0",
     "electron-webpack": "^2.1.2",
     "electron-webpack-ts": "^2.0.2",
@@ -25,7 +26,6 @@
     "node-sass": "^4.9.2",
     "prettier": "^1.13.7",
     "sass-loader": "^7.0.3",
-    "source-map-support": "^0.5.6",
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-processor-html": "^1.0.0",
@@ -38,10 +38,10 @@
   },
   "dependencies": {
     "codemirror": "^5.39.2",
-    "electron": "^2.0.5",
     "marked": "^0.4.0",
     "rxjs": "^6.2.2",
     "sanitize.css": "^6.0.0",
+    "source-map-support": "^0.5.6",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1"
   },

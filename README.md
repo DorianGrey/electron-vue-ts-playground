@@ -8,3 +8,6 @@ Nothing special for now, just for testing purposes.
 # Tasks
 - `start`: Dev. mode.
 - `build`: Creates production builds, currently for windows and linux.
+
+# Warning
+- `build` does not yet yield useful results, esp. the navigation does not work. Still investigating.
