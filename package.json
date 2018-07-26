@@ -13,6 +13,7 @@
     "url": "git+https://github.com/DorianGrey/electron-vue-ts-playground.git"
   },
   "devDependencies": {
+    "@types/codemirror": "^0.0.58",
     "@types/marked": "^0.4.0",
     "css-loader": "^1.0.0",
     "electron-builder": "^20.24.4",
@@ -36,10 +37,10 @@
     "webpack": "^4.16.1"
   },
   "dependencies": {
-    "@types/codemirror": "^0.0.58",
     "codemirror": "^5.39.2",
     "electron": "^2.0.5",
     "marked": "^0.4.0",
+    "rxjs": "^6.2.2",
     "sanitize.css": "^6.0.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1"

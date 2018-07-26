@@ -32,11 +32,23 @@ import "codemirror/mode/markdown/markdown.js";
 import "codemirror/theme/darcula.css";
 // Imports for "marked".
 import * as marked from "marked";
+// Reactive stuff
+import { fromEvent, Subscription } from "rxjs";
+import { debounceTime, map } from "rxjs/operators";
 
 @Component
 export default class Markdown extends Vue {
   editor: CodeMirror.EditorFromTextArea;
   previewText: string | null = null;
+  previewSubscription!: Subscription;
+  readonly markedOptions = {
+    gfm: true,
+    pedantic: false,
+    smartLists: true,
+    tables: true,
+    xhtml: false,
+    smartypants: false
+  };
 
   mounted() {
     const element = this.$el.querySelector<HTMLTextAreaElement>("#md-editor");
@@ -49,18 +61,19 @@ export default class Markdown extends Vue {
         viewportMargin: Infinity // See https://codemirror.net/demo/resize.html -> we want dynamic height.
       });
 
-      this.editor.on("changes", () => {
-        // TODO: We should got with some kind of "debounce" or "throttle" here to avoid too may re-renders on typing.
-        this.previewText = marked(this.editor.getValue(), {
-          gfm: true,
-          pedantic: false,
-          smartLists: true,
-          tables: true,
-          xhtml: false,
-          smartypants: false
-        });
+      const previewObservable = fromEvent(this.editor, "changes").pipe(
+        debounceTime(200),
+        map(() => this.editor.getValue())
+      );
+
+      this.previewSubscription = previewObservable.subscribe(newText => {
+        this.previewText = marked(newText, this.markedOptions);
       });
     }
+  }
+
+  beforeDestroy() {
+    this.previewSubscription.unsubscribe();
   }
 }
 </script>
