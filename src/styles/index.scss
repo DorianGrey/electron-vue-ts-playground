@@ -14,3 +14,19 @@ body {
   color: $primary-font-color;
   background-color: $primary-bg-color;
 }
+
+.row, .column {
+  display: flex;
+
+  &.flex-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+.row {
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
+}

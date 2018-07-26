@@ -34,7 +34,7 @@ export default class App extends Vue {
 
 main {
   grid-area: content;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 footer {

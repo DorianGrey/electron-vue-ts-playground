@@ -52,6 +52,7 @@ module.exports = {
     "unit-whitelist": [
       "fr",
       "vh",
+      "vw",
       "em",
       "rem",
       "%",
