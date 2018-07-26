@@ -1,5 +1,7 @@
 module.exports = {
+  stats: "minimal",
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    stats: "minimal"
   }
 };
