@@ -48,7 +48,7 @@
   "scripts": {
     "start": "electron-webpack dev",
     "compile": "electron-webpack",
-    "build": "yarn compile && electron-builder -wl --x64",
+    "build": "yarn compile && electron-builder -l --x64",
     "build:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix && stylelint \"src/**/*.vue\"",
     "format": "prettier --write \"src/**/*.{ts,vue}\"",

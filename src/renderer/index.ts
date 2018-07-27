@@ -32,7 +32,7 @@ const routes: RouteConfig[] = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash",
   routes
 });
 
