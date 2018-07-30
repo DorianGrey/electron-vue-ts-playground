@@ -30,3 +30,24 @@ body {
 .column {
   flex-direction: column;
 }
+
+button {
+  border: 0;
+  padding: 6px 12px;
+  color: $darcula-color;
+  background-color: $darcula-bg-color;
+  cursor: pointer;
+  transition: background-color ease 0.25s;
+
+  &:hover {
+    background-color: lighten($darcula-bg-color, 5%);
+  }
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.italic {
+  font-style: italic;
+}

@@ -10,6 +10,10 @@
       <!-- MD editor block -->
       <div class="column">
         <h3>Insert your markdown here:</h3>
+        <div class="row editor-keys">
+          <button type="button" @click="boldClick()" class="bold">B</button>
+          <button type="button" @click="italicClick()" class="italic">I</button>
+        </div>
         <textarea id="md-editor"></textarea>
       </div>
       <!-- Preview block -->
@@ -61,6 +65,18 @@ export default class Markdown extends Vue {
         viewportMargin: Infinity // See https://codemirror.net/demo/resize.html -> we want dynamic height.
       });
 
+      this.editor.addKeyMap({
+        "Ctrl-B": () => {
+          this.boldClick();
+        },
+        "Cmd-B": () => {
+          this.boldClick();
+        },
+        "Ctrl-I": () => {
+          this.italicClick();
+        }
+      });
+
       const previewObservable = fromEvent(this.editor as any, "changes").pipe(
         debounceTime(200),
         map(() => this.editor.getValue())
@@ -74,6 +90,31 @@ export default class Markdown extends Vue {
 
   beforeDestroy() {
     this.previewSubscription.unsubscribe();
+  }
+
+  boldClick() {
+    this.addMarkup("**");
+  }
+
+  italicClick() {
+    this.addMarkup("_");
+  }
+
+  private addMarkup(wrapWith: string) {
+    const doc = this.editor.getDoc();
+    const selection = doc.getSelection();
+    if (selection && selection.length > 0) {
+      doc.replaceSelection(`${wrapWith}${selection}${wrapWith}`);
+    } else {
+      const cursorStart = doc.getCursor("start");
+      const newText = `${wrapWith}${wrapWith}`;
+      doc.replaceRange(newText, cursorStart);
+      doc.setCursor({
+        line: cursorStart.line,
+        ch: cursorStart.ch + wrapWith.length
+      });
+    }
+    this.editor.focus();
   }
 }
 </script>
@@ -105,5 +146,13 @@ export default class Markdown extends Vue {
 /* See https://github.com/codemirror/CodeMirror/issues/2835 for that trick */
 .CodeMirror-scroll {
   min-height: 300px;
+}
+
+.editor-keys {
+  padding-bottom: 0.5rem;
+
+  button:not(:last-child) {
+    margin-right: 0.25rem;
+  }
 }
 </style>
