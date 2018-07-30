@@ -11,8 +11,11 @@
       <div class="column">
         <h3>Insert your markdown here:</h3>
         <div class="row editor-keys">
-          <button type="button" @click="boldClick()" class="bold">B</button>
-          <button type="button" @click="italicClick()" class="italic">I</button>
+          <button type="button" @click="boldClick()" class="bold"><i class="fa fa-bold" aria-hidden="true"></i></button>
+          <button type="button" @click="italicClick()" class="italic"><i class="fa fa-italic" aria-hidden="true"></i></button>
+          <button type="button" @click="strikeThroughClick()" class="italic"><i class="fa fa-strikethrough" aria-hidden="true"></i></button>
+          <button type="button" @click="unorderedListClick()" class="italic"><i class="fa fa-list" aria-hidden="true"></i></button>
+          <button type="button" @click="orderedListClick()" class="italic"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
         </div>
         <textarea id="md-editor"></textarea>
       </div>
@@ -93,14 +96,38 @@ export default class Markdown extends Vue {
   }
 
   boldClick() {
-    this.addMarkup("**");
+    this.addWrappingMarkup("**");
   }
 
   italicClick() {
-    this.addMarkup("_");
+    this.addWrappingMarkup("_");
   }
 
-  private addMarkup(wrapWith: string) {
+  strikeThroughClick() {
+    this.addWrappingMarkup("~~");
+  }
+
+  unorderedListClick() {
+    this.addLineMarkup("* ");
+  }
+
+  orderedListClick() {
+    this.addLineMarkup("1. ");
+  }
+
+  private addLineMarkup(prefix: string) {
+    const doc = this.editor.getDoc();
+    const cursor = doc.getCursor("start");
+    const line = doc.getLine(cursor.line);
+    doc.replaceRange(
+      `${prefix}${line}`,
+      { line: cursor.line, ch: 0 },
+      { line: cursor.line, ch: Infinity }
+    );
+    this.editor.focus();
+  }
+
+  private addWrappingMarkup(wrapWith: string) {
     const doc = this.editor.getDoc();
     const selection = doc.getSelection();
     if (selection && selection.length > 0) {
