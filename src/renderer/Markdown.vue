@@ -40,6 +40,9 @@
 </template>
 
 <script lang="ts">
+// Need this for being able to open links externally.
+import { shell } from "electron";
+// Vue stuff
 import Vue from "vue";
 import Component from "vue-class-component";
 // See https://discuss.codemirror.net/t/having-trouble-with-nodejs-require-and-codemirror-addons/1079/12
@@ -66,6 +69,19 @@ export default class Markdown extends Vue {
     tables: true,
     xhtml: false,
     smartypants: false
+  };
+
+  readonly linkClickCatcher = (event: Event) => {
+    if (event.target) {
+      const target = event.target as HTMLElement;
+      if (target.tagName.toLowerCase() == "a") {
+        event.preventDefault();
+        const link = target.getAttribute("href");
+        if (link) {
+          shell.openExternal(link);
+        }
+      }
+    }
   };
 
   mounted() {
@@ -103,10 +119,19 @@ export default class Markdown extends Vue {
         this.previewText = marked(newText, this.markedOptions);
       });
     }
+
+    const preview = this.$el.querySelector("#md-rendered-preview");
+    if (preview) {
+      preview.addEventListener("click", this.linkClickCatcher);
+    }
   }
 
   beforeDestroy() {
     this.previewSubscription.unsubscribe();
+    const preview = this.$el.querySelector("#md-rendered-preview");
+    if (preview) {
+      preview.removeEventListener("click", this.linkClickCatcher);
+    }
   }
 
   boldClick() {
