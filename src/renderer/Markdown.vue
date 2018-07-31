@@ -10,12 +10,23 @@
       <!-- MD editor block -->
       <div class="column">
         <h3>Insert your markdown here:</h3>
-        <div class="row editor-keys">
-          <button type="button" @click="boldClick()" class="bold"><i class="fa fa-bold" aria-hidden="true"></i></button>
-          <button type="button" @click="italicClick()" class="italic"><i class="fa fa-italic" aria-hidden="true"></i></button>
-          <button type="button" @click="strikeThroughClick()" class="italic"><i class="fa fa-strikethrough" aria-hidden="true"></i></button>
-          <button type="button" @click="unorderedListClick()" class="italic"><i class="fa fa-list" aria-hidden="true"></i></button>
-          <button type="button" @click="orderedListClick()" class="italic"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+        <div class="row editor-keys flex-edged">
+          <div class="row button-grp">
+            <button type="button" @click="boldClick()" title="Bold"><i class="fa fa-bold" aria-hidden="true"></i></button>
+            <button type="button" @click="italicClick()" title="Italic"><i class="fa fa-italic" aria-hidden="true"></i></button>
+            <button type="button" @click="strikeThroughClick()" title="Strikethrough"><i class="fa fa-strikethrough" aria-hidden="true"></i></button>
+          </div>
+          <div class="row button-grp">
+            <button type="button" @click="unorderedListClick()" title="Unordered list"><i class="fa fa-list" aria-hidden="true"></i></button>
+            <button type="button" @click="orderedListClick()" title="Ordered list"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+          </div>
+          <div class="row button-grp">
+            <button type="button" @click="linkClick()" title="Link"><i class="fa fa-link" aria-hidden="true"></i></button>
+            <button type="button" @click="imageClick()" title="Image"><i class="fa fa-file-image-o" aria-hidden="true"></i></button>
+            <button type="button" @click="tableClick()" title="Table"><i class="fa fa-table" aria-hidden="true"></i></button>
+          </div>
+
+
         </div>
         <textarea id="md-editor"></textarea>
       </div>
@@ -77,6 +88,9 @@ export default class Markdown extends Vue {
         },
         "Ctrl-I": () => {
           this.italicClick();
+        },
+        "Ctrl-K": () => {
+          this.linkClick();
         }
       });
 
@@ -96,15 +110,15 @@ export default class Markdown extends Vue {
   }
 
   boldClick() {
-    this.addWrappingMarkup("**");
+    this.addWrappingMarkup("**", "**");
   }
 
   italicClick() {
-    this.addWrappingMarkup("_");
+    this.addWrappingMarkup("_", "_");
   }
 
   strikeThroughClick() {
-    this.addWrappingMarkup("~~");
+    this.addWrappingMarkup("~~", "~~");
   }
 
   unorderedListClick() {
@@ -113,6 +127,59 @@ export default class Markdown extends Vue {
 
   orderedListClick() {
     this.addLineMarkup("1. ");
+  }
+
+  linkClick() {
+    this.externalRefClick();
+  }
+
+  imageClick() {
+    this.externalRefClick("!");
+  }
+
+  tableClick() {
+    const doc = this.editor.getDoc();
+    const cursorStart = doc.getCursor("start");
+    const tablePreview = [
+      `| Tables        | Are           | Cool  |`,
+      `| ------------- |:-------------:| -----:|`,
+      `| col 3 is      | right-aligned | $1600 |`,
+      `| col 2 is      | centered      |   $12 |`
+    ].join("\n");
+
+    doc.replaceRange(tablePreview, cursorStart);
+    this.editor.focus();
+  }
+
+  private externalRefClick(prefix: string = "") {
+    const doc = this.editor.getDoc();
+    const selection = doc.getSelection();
+    const cursorStart = doc.getCursor("start");
+    if (selection && selection.length > 0) {
+      if (/^(https?:|mailto:|www\.)/.test(selection)) {
+        const targetString = `${prefix}[](${selection})`;
+        doc.replaceSelection(targetString);
+        doc.setCursor({
+          line: cursorStart.line,
+          ch: cursorStart.ch + 1 + prefix.length
+        });
+      } else {
+        const targetString = `${prefix}[${selection}]()`;
+        doc.replaceSelection(targetString);
+        doc.setCursor({
+          line: cursorStart.line,
+          ch: cursorStart.ch + targetString.length - 1
+        });
+      }
+    } else {
+      const newText = `${prefix}[]()`;
+      doc.replaceRange(newText, cursorStart);
+      doc.setCursor({
+        line: cursorStart.line,
+        ch: cursorStart.ch + 1 + prefix.length
+      });
+    }
+    this.editor.focus();
   }
 
   private addLineMarkup(prefix: string) {
@@ -127,18 +194,18 @@ export default class Markdown extends Vue {
     this.editor.focus();
   }
 
-  private addWrappingMarkup(wrapWith: string) {
+  private addWrappingMarkup(wrapBefore: string, wrapAfter: string) {
     const doc = this.editor.getDoc();
     const selection = doc.getSelection();
     if (selection && selection.length > 0) {
-      doc.replaceSelection(`${wrapWith}${selection}${wrapWith}`);
+      doc.replaceSelection(`${wrapBefore}${selection}${wrapAfter}`);
     } else {
       const cursorStart = doc.getCursor("start");
-      const newText = `${wrapWith}${wrapWith}`;
+      const newText = `${wrapBefore}${wrapAfter}`;
       doc.replaceRange(newText, cursorStart);
       doc.setCursor({
         line: cursorStart.line,
-        ch: cursorStart.ch + wrapWith.length
+        ch: cursorStart.ch + wrapBefore.length
       });
     }
     this.editor.focus();
